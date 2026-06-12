@@ -1,7 +1,7 @@
-# LLVM Tail Call Elimination Pass
+# LLVM TCE & ADCE Pass
 
-In-tree LLVM pass implementing tail call elimination — transforms tail-recursive
-calls into loops, replacing recursion with a branch back to the function entry.
+Out-of-tree LLVM passes implementing tail call elimination and aggressive dead
+code elimination, designed to run ADCE after TCE.
 
 ## Requirements
 
@@ -12,32 +12,25 @@ calls into loops, replacing recursion with a branch back to the function entry.
 
 ## Build
 
-Configure and build LLVM with the pass (from the repository root):
-
 ```
-./make_llvm.sh
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
+cd build && make && cd ..
 ```
-
-Or, if LLVM is already configured, build just the pass:
-
-```
-cd build && make LLVMTCEPass && cd ..
-```
-
-The plugin is produced at `build/lib/LLVMTCEPass.so`.
 
 ## Usage
 
 Compile input to LLVM IR:
 
 ```
-clang -O0 -Xclang -disable-O0-optnone -emit-llvm -S example_tce.c -o example_tce.ll
+clang -O0 -Xclang -disable-O0-optnone -emit-llvm -S example.c -o example.ll
 ```
 
-Run the pass (legacy pass manager):
+Run passes:
 
 ```
-opt -load build/lib/LLVMTCEPass.so --enable-new-pm=0 \
-    -tce-pass \
-    example_tce.ll -o example_tce_out.ll -S
+opt -load build/libLLVMTCEPass.so \
+    -load build/libLLVMADCEPass.so \
+    --enable-new-pm=0 \
+    -tce-pass -adce-pass \
+    example.ll -o example_out.ll -S
 ```
