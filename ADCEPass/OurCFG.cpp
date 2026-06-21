@@ -2,7 +2,7 @@
 // Created by andrija on 21. 6. 2026..
 //
 
-#include "ADCEPass/OurCFG.h"
+#include "OurCFG.h"
 
 OurCFG::OurCFG(llvm::Function &F) {
     FunctionName = F.getName().str();
