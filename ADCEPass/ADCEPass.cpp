@@ -23,7 +23,7 @@ namespace {
         static char ID;
         OurADCEPass(): FunctionPass(ID) {}
 
-        void elimanteDeadInstructions(Function& F) {
+        void eliminateDeadInstructions(Function& F) {
             InstructionsToRemove.clear();
 
             std::set<Instruction*> Alive;
@@ -130,8 +130,8 @@ namespace {
         bool runOnFunction(Function& F) override {
             do {
                 InstructionRemoved = false;
-                elimanteDeadInstructions(F);
-                elimanteDeadInstructions(F);
+                eliminateDeadInstructions(F);
+                eliminateUnreachableInstructions(F);
             } while (InstructionRemoved);
 
             return true;
