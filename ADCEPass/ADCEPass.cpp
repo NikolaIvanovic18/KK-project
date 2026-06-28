@@ -85,7 +85,7 @@ namespace {
             for (BasicBlock& BB: F) {
                 for (Instruction& I: BB) {
                     // Ako nije ziva ili nije terminator brisemo
-                    if (!Alive.count(&I) && !I.isTerminator()) {
+                    if (!Alive.count(&I)) {
                         InstructionsToRemove.push_back(&I);
                     }
                 }
