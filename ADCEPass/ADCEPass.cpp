@@ -67,7 +67,7 @@ namespace {
 
                 // Uzimamo operande
                 for (Use& U: I->operands()) {
-                    if (Instruction* Op = dyn_cast<Instruction>(&U)) {
+                    if (Instruction* Op = dyn_cast<Instruction>(U)) {
                         // Ako operand nije vec oznacen kao ziv ubacujemo ga u skup i red
                         // Posto je skup count vraca 1 ili 0
                         if (!Alive.count(Op)) {
@@ -81,7 +81,7 @@ namespace {
             // Sve sto nije u Alive je mrtvo i to brisemo
             // replaceAllUsesWith(undef) koristimo jer LLVM ne dozvoljava brisanje
             // instrukcija koja ima korisnike, undef govori LLVM da se ona moze ignorisati
-            // Terminatore nikad ne vrisemo, BB uvek mora ima tacno 1
+            // Terminatore nikad ne brisemo, BB uvek mora ima tacno 1
             for (BasicBlock& BB: F) {
                 for (Instruction& I: BB) {
                     // Ako nije ziva ili nije terminator brisemo
@@ -91,7 +91,7 @@ namespace {
                 }
             }
 
-            // Obrisali smo nesto, ovo nam sluzi da se do-while opet izvrso
+            // Obrisali smo nesto, ovo nam sluzi da se do-while opet izvrsi
             if (!InstructionsToRemove.empty()) {
                 InstructionRemoved = true;
             }
